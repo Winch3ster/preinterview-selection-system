@@ -1,1 +1,21 @@
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
+
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.examPage-header{
+    background-color: rgba(211, 211, 211, 0.8);
+    margin: 0;
+}
+
+.exam-page{
+    padding: 0;
+}
+
+.web-ide{
+    margin: 0;
+    border-style: none;
+    overflow: hidden;
+}
