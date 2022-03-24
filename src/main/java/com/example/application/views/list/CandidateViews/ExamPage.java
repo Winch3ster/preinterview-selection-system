@@ -1,7 +1,13 @@
 package com.example.application.views.list.CandidateViews;
 
+import com.example.application.views.list.HiringManagerViews.QuestionBlock;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
@@ -22,7 +28,11 @@ import java.util.Iterator;
 @Route("examPage")
 public class ExamPage extends VerticalLayout {
 
+    int score =0;
+
+    HorizontalLayout evaluateButtonLayout = new HorizontalLayout();
     JSONParser jsonParser = new JSONParser();
+    Button evaluateButton = new Button();
 
     // <-- Test data -->
     ArrayList<HashMap<String, ArrayList<String>>> questionAndAnswerToBeLoadedList = new ArrayList<>();
@@ -59,6 +69,11 @@ public class ExamPage extends VerticalLayout {
         addClassName("exam-page");
         setSizeFull();
         configureHeader();
+
+
+        configureEvaluateButtonLayout();
+        configureEvaluateButton();
+
         //generateQuestionsExamPage();
 
         try (FileReader reader = new FileReader("QuestionListJSON.json"))
@@ -82,15 +97,56 @@ public class ExamPage extends VerticalLayout {
         }
 
 
-
+        //Things to add in the page
         add(
                 header,
-                mainContent
+                mainContent,
+                evaluateButton
         );
 
 
     } //end of constructor
 
+    private void configureEvaluateButtonLayout() {
+
+        evaluateButtonLayout.setWidthFull();
+        evaluateButtonLayout.setAlignItems(Alignment.CENTER);
+        evaluateButtonLayout.add(evaluateButton);
+
+    }
+
+    private void configureEvaluateButton() {
+        evaluateButton.setText("Evaluate");
+        evaluateButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        evaluateButton.addClickListener(event -> {
+            score =0;
+            checkAnswers();
+
+            Notification.show("Your Score is " + score);
+        });
+
+    }
+
+
+    // To be completed!!!!!!!!!!!!!!!!!!!
+    private void checkAnswers() {
+        for (int i =0; i < mainContent.getComponentCount(); i++){
+            Component currentCom = mainContent.getComponentAt(i);//get each object
+            //Check if the object is an instance of QuestionBlocks class
+            if(currentCom instanceof QuestionBlockCandidate){
+                String legitAnswer = ((QuestionBlockCandidate) currentCom).getAnswer();
+                String userAns = ((QuestionBlockCandidate) currentCom).getUserAnswer();
+                System.out.println(legitAnswer);
+                System.out.println(userAns);
+
+                if (userAns.equals(legitAnswer)){
+                    System.out.println("this is running from check answer equality");
+                    score += 1;
+                }
+            }
+        }
+
+    }
 
 
     private void configureHeader() {
@@ -112,20 +168,34 @@ public class ExamPage extends VerticalLayout {
         Label questionField = new Label();
         RadioButtonGroup<String> options = new RadioButtonGroup<>();
 
-        //extract options from JSON inner option array
-        ArrayList<String> temp = new ArrayList<>();
-        JSONArray jsonArray = (JSONArray) questionObject.get("option");
-        Iterator<String> iterator = jsonArray.iterator();
-        while(iterator.hasNext()) {
-            temp.add(iterator.next());
-        }
 
         // Mapping the question to exam page
+        String questionType = (String) questionObject.get("questionType");
+        //System.out.println(questionType);
 
         String questionText = (String) questionObject.get("questionText");
         String answer = (String) questionObject.get("answer");
 
+        if (questionType.equals("Multiple Choice") || questionType.equals("True False")){
+            //System.out.println("This inner Multiple choice statement is running");
+            //extract options from JSON inner option array
+            ArrayList<String> temp = new ArrayList<>();
+            JSONArray jsonArray = (JSONArray) questionObject.get("option");
+            Iterator<String> iterator = jsonArray.iterator();
+            while(iterator.hasNext()) {
+                temp.add(iterator.next());
+            }
+            QuestionBlockChoicesCandidate questionBlockChoices = new QuestionBlockChoicesCandidate(questionText, answer, temp);
+            mainContent.add(questionBlockChoices);
+        } else {
+            QuestionBlockCodeCandidate questionBlockCode = new QuestionBlockCodeCandidate(questionText, answer);
+            mainContent.add(questionBlockCode);
+            //System.out.println("This is running");
+        }
 
+
+
+        /*
         questionField.setText(questionText);
         options.setItems(temp);
         questionBlock.add(questionField, options);
@@ -135,6 +205,8 @@ public class ExamPage extends VerticalLayout {
         System.out.println(questionText);
         System.out.println(answer);
         System.out.println(questionObject.get("option"));
+
+         */
     }
 
 

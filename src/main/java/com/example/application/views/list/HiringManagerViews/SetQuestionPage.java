@@ -164,8 +164,6 @@ public class SetQuestionPage extends VerticalLayout {
                 //Get question from question block
                 String questionText = ((QuestionBlock) currentQuestionBlock).getQuestionText();
 
-                //Get options from option block
-                ArrayList<String> questionOptions = ((QuestionBlock) currentQuestionBlock).getQuestionOptions();
 
                 //To be changed
                 String answer = ((QuestionBlock) currentQuestionBlock).getAnswer();
@@ -175,9 +173,15 @@ public class SetQuestionPage extends VerticalLayout {
 
                 questionDetails.put("questionText", questionText);
                 questionDetails.put("questionType", questionType);
-                questionDetails.put("option", questionOptions);
                 questionDetails.put("answer", answer);
+                if (questionType.equals("Multiple Choice") || questionType.equals("True False")){
+                    //Get options from option block
+                    ArrayList<String> questionOptions = ((QuestionBlock) currentQuestionBlock).getQuestionOptions();
+                    questionDetails.put("option", questionOptions);
 
+                }
+
+                //inside this questionObject is another JSON object storing all the information
                 JSONObject questionObject = new JSONObject();
                 questionObject.put("question", questionDetails);
 
