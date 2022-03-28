@@ -15,20 +15,22 @@ import com.vaadin.flow.router.Route;
 @Route(value = "managerPage", layout = MainApplicationLayout.class)//ListView will be loaded into the MainLayout class
 public class ManagerDashboard extends VerticalLayout {
 
-    Grid<Contact> grid = new Grid<>(Contact.class);
+    Grid<Contact> grid = new Grid<>(Contact.class); //Display candidates' information
     TextField filterText = new TextField();
 
+    //Class constructor
     public ManagerDashboard(){
         addClassName("list-view");
         setSizeFull();
-
         configureGrid();
 
         add(
-
                 getToolBar(),
                 grid
         );
+
+
+
 
 
     }
@@ -44,7 +46,6 @@ public class ManagerDashboard extends VerticalLayout {
 
         //horizontal layout to wrap these filter text and button together o they are next to each other
         HorizontalLayout toolbar = new HorizontalLayout(filterText, addCandidateButton);
-
         toolbar.addClassName("toolbar");
 
         return toolbar;

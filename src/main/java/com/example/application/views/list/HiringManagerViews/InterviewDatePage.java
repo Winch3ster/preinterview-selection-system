@@ -15,6 +15,7 @@ public class InterviewDatePage extends VerticalLayout {
     DatePicker datePicker = new DatePicker("Interview date");
     Button uploadButton = new Button("UPLOAD");
 
+    //Class constructor
     InterviewDatePage(){
         setSizeFull();
         setAlignItems(Alignment.CENTER);
@@ -23,7 +24,7 @@ public class InterviewDatePage extends VerticalLayout {
         add(
                 interviewDatePageLayout
                 );
-    }
+    }//end of class constructor
 
     private void configureInterviewDatePageLayout() {
         interviewDatePageLayout.add(datePicker, uploadButton);
@@ -33,7 +34,7 @@ public class InterviewDatePage extends VerticalLayout {
     private void configureUploadButton() {
         uploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         uploadButton.addClickListener(event -> {
-            Notification.show("Button clicked!");
+            //Notification.show("Button clicked!");
             interviewDatePageLayout.removeAll();
             interviewDatePageLayout.add(new H1("Questions and interview date uploaded!"));
         });

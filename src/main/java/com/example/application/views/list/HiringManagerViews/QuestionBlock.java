@@ -30,7 +30,6 @@ public class QuestionBlock extends VerticalLayout {
     private String answer;
 
     private ArrayList<String> multipleChoiceOptions = new ArrayList<>();
-    //private String[] multipleChoiceOptions = new String[4];
     private String questionType;
     //Question types --> "Multiple Choice", "True False", "Code"
 
@@ -38,7 +37,7 @@ public class QuestionBlock extends VerticalLayout {
     private boolean toBeRemoved;
 
 
-    //Component for questions
+    //Components for question block
     private TextArea questionField = new TextArea();
     private Button removeButton =new Button();
     private Select<String> questionSelector = new Select<>();
@@ -48,16 +47,14 @@ public class QuestionBlock extends VerticalLayout {
     private HorizontalLayout optionBlock = new HorizontalLayout();
 
 
-
+    //Class constructor
     QuestionBlock(){
-        toBeRemoved = false; //question is not to be removed upon initialization
+        toBeRemoved = false; //question will not to be removed upon initialization
 
         this.removeButton.addClassName("remove-button");
         this.questionBlock.addClassName("question-block");
         this.optionDisplay.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
         this.optionDisplay.setLabel("Select the answer here");
-
-
         optionDisplay.addValueChangeListener(event -> {
             answer = this.optionDisplay.getValue();
         });
@@ -188,22 +185,17 @@ public class QuestionBlock extends VerticalLayout {
                     questionField,
                     questionSelector,
                     optionBlock);
-
-
-
             //Notification.show("The value is " + this.toBeRemoved);
         });
         return removeButton;
     }
 
-
+    //Getters method
     //get the state of the question block
     public boolean getState(){
         return toBeRemoved;
     }
 
-
-    //Newly added methods
     public String getAnswer(){
         return answer;
     }
@@ -224,7 +216,6 @@ public class QuestionBlock extends VerticalLayout {
         ArrayList<String> trueFalse = new ArrayList<>();
         trueFalse.add("True");
         trueFalse.add("False");
-
         return trueFalse;
     }
 

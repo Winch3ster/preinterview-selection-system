@@ -5,12 +5,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class QuestionBlockCandidate extends VerticalLayout {
 
+    //Question Block attributes
     private String answer;
     private String userAnswer;
     public VerticalLayout questionBlock = new VerticalLayout();
     public Label questionField = new Label();
 
-
+    //Question class methods
     //getters
     public String getAnswer(){
         return answer;

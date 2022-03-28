@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @PageTitle("list")
-@Route(value = "")
+@Route(value = "test")
 public class ListView extends VerticalLayout {
 
 

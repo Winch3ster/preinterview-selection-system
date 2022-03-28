@@ -1,7 +1,9 @@
 package com.example.application.views.list;
 
-import com.vaadin.flow.component.Component;
+import com.example.application.views.list.CandidateViews.ExamPage;
+import com.example.application.views.list.HiringManagerViews.HiringManagerLogin;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -16,10 +18,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.Scanner;
 
 
-
-@Route("homepage")
+@Route("")
 @PageTitle("Home Page")
 public class Home extends VerticalLayout {
     Dialog conformation = new Dialog();
@@ -31,22 +33,21 @@ public class Home extends VerticalLayout {
     Button cancelButton = new Button("Cancel");
     TextField name =new TextField();
 
-    Home(){
-
+    public Home(){
+        // <-- GUI code starts here -->
         addClassName("home-page");
         setSizeFull();
-        //setAlignItems(Alignment.CENTER);
-
         configureDialog();
         add(
-
                 adminSignInLayout(),
                 register()
         );
+        // <-- GUI code ends here -->
+
     }
 
+    // <-- GUI Interface methods -->
     public VerticalLayout register(){
-
         H1 title = new H1("Pre-Interview Selection System");
 
         //Text field for candidate name
@@ -63,7 +64,6 @@ public class Home extends VerticalLayout {
         email.setRequiredIndicatorVisible(true);
         email.setClearButtonVisible(true);
 
-
         //submit button
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener(click -> {
@@ -71,8 +71,6 @@ public class Home extends VerticalLayout {
 
         });
         submitButton.addClickShortcut(Key.ENTER);
-
-
 
         VerticalLayout registerLayout = new VerticalLayout();
         registerLayout.add(title, name, email, submitButton);
@@ -84,7 +82,7 @@ public class Home extends VerticalLayout {
     public HorizontalLayout adminSignInLayout(){
         //Manager login button
         managerSignIn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        managerSignIn.addClickListener(click -> Notification.show("Directing to manager login page"));
+        managerSignIn.addClickListener(click -> UI.getCurrent().navigate(HiringManagerLogin.class));
 
         //div container to store manager login button
         HorizontalLayout managerSignInContainer = new HorizontalLayout();
@@ -98,24 +96,27 @@ public class Home extends VerticalLayout {
                 new H2("Conformation"),
                 new H3("Please make sure the data you entered match the one in your application form. \n" +
                         "Any foreign email addresses will be discarded. You may only take the test once." ),
-                buttongrid()
+                buttonGrid()
         );
-
     }
 
-    private HorizontalLayout buttongrid() {
+    private HorizontalLayout buttonGrid() {
         continueButton.addClickListener(event -> {
+            //Remember to add a function to redirect user to another page
             Notification.show(name.getValue());
             conformation.close();
         });
+
         continueButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-
+        continueButton.addClickListener(event -> UI.getCurrent().navigate(ExamPage.class));
         cancelButton.addClickListener((buttonClickEvent -> conformation.close()));
-        dialogButtonLayout.add(cancelButton, continueButton);
 
+        dialogButtonLayout.add(cancelButton, continueButton);
         return dialogButtonLayout;
     }
+
+    // <-- GUI Interface methods -->
+
 
 }
 

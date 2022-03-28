@@ -43,8 +43,6 @@ public class MainApplicationLayout extends AppLayout {
         addToDrawer(new VerticalLayout(
                 listView,
                 setQuestion
-
-
         ));
     }
 }

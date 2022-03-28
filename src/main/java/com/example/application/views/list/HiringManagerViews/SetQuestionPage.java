@@ -32,10 +32,10 @@ public class SetQuestionPage extends VerticalLayout {
 
     JSONArray QuestionListJSON = new JSONArray();
 
+    //Class constructor
     SetQuestionPage(){
 
         setSizeFull();
-
         configureNextPageLayout();
         configureQuestionPageLayout();
 
@@ -44,7 +44,7 @@ public class SetQuestionPage extends VerticalLayout {
                 questionPageLayout
         );
 
-    }
+    }//End of class constructor
 
     private void configureQuestionPageLayout(){
         questionPageLayout.setAlignItems(Alignment.CENTER);
@@ -61,7 +61,6 @@ public class SetQuestionPage extends VerticalLayout {
         buttonPanel.add(addQuestionButton(), removeAllBlocks());
 
         return buttonPanel;
-
     }
 
     //Configure "add question block" button
@@ -141,34 +140,21 @@ public class SetQuestionPage extends VerticalLayout {
                 String answer = ((QuestionBlock) currentQuestionBlock).getAnswer();
                 //
                 questionsAndAnswer.put(questionText, questionOptions); //Stores question and options into hashMap
-
             }
         }
         System.out.println(questionsAndAnswer);
     }
 
-    public HashMap<String, ArrayList<String>> getQuestionsAndAnswer(){
-        return  questionsAndAnswer;
-    }
-
-
     private void packQuestionsJSON() {
 
-        //Hash map to store info into JSON
         for(int z = 0; z < questionList.getComponentCount(); z++){
-
             Component currentQuestionBlock = questionList.getComponentAt(z);
             if (currentQuestionBlock instanceof QuestionBlock){
 
                 JSONObject questionDetails = new JSONObject();
-                //Get question from question block
+                //Extracting information from question block
                 String questionText = ((QuestionBlock) currentQuestionBlock).getQuestionText();
-
-
-                //To be changed
                 String answer = ((QuestionBlock) currentQuestionBlock).getAnswer();
-                //
-
                 String questionType = ((QuestionBlock) currentQuestionBlock).getQuestionType();
 
                 questionDetails.put("questionText", questionText);
@@ -178,35 +164,31 @@ public class SetQuestionPage extends VerticalLayout {
                     //Get options from option block
                     ArrayList<String> questionOptions = ((QuestionBlock) currentQuestionBlock).getQuestionOptions();
                     questionDetails.put("option", questionOptions);
-
                 }
 
-                //inside this questionObject is another JSON object storing all the information
+                //inside this questionObject is another JSON object storing all the question information
                 JSONObject questionObject = new JSONObject();
                 questionObject.put("question", questionDetails);
-
                 QuestionListJSON.add(questionObject);
             }
 
         }
+        //System.out.println(QuestionListJSON.toString());
 
-        System.out.println(QuestionListJSON.toString());
+        //Creating a JSON file
         try (FileWriter file = new FileWriter("QuestionListJSON.json")) {
             //We can write any JSONArray or JSONObject instance to the file
             file.write(QuestionListJSON.toJSONString());
             file.flush();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
     }
 
+    //Getter method
+    public HashMap<String, ArrayList<String>> getQuestionsAndAnswer(){
+        return  questionsAndAnswer;
+    }
 
 }
 
