@@ -28,7 +28,7 @@ public class Main {
 
         while(validInput == false){
 
-            System.out.println("Welcome to Pre-Interview Selection System." +
+            System.out.println("\nWelcome to Pre-Interview Selection System." +
                     "\nTo run in terminal mode, enter 1. Else, enter 2 to enable GUI features (from main class)");
             String userOption = userInput.nextLine(); //reads user input
 
@@ -37,7 +37,7 @@ public class Main {
                 HomeCLI candidateSignIn = new HomeCLI();
                 validInput = true;
             } else if (userOption.equals("2")){
-                System.out.println("Starting GUI");
+                System.out.println("Starting GUI...");
                 SpringApplication.run(Application.class, args);
             } else{
                 System.out.println("Invalid input, please enter 1 or 2 only");

@@ -103,7 +103,7 @@ public class Home extends VerticalLayout {
     private HorizontalLayout buttonGrid() {
         continueButton.addClickListener(event -> {
             //Remember to add a function to redirect user to another page
-            Notification.show(name.getValue());
+            //Notification.show(name.getValue());
             conformation.close();
         });
 

@@ -22,8 +22,9 @@ import java.util.Scanner;
 
 /*
     This is mainly developed as a web-based application with Vaadin framework for the GUI.
-    Hence, this program needs Apache Maven and Apache Tomcat to run on local machine's web browser (localhost:8080)
-    To load the program, enter the numeric number prompted when you start the application
+    Hence, this program needs Apache Maven and Apache Tomcat to run on local machine's web browser (localhost:8080).
+    Note that an internet connection is required inorder to start this application in GUI mode!
+    To load the program, enter the numeric number prompted when you start the application.
  */
 @SpringBootApplication
 @Theme(value = "preinterviewselectionsystem")
@@ -34,12 +35,12 @@ public class Application extends SpringBootServletInitializer implements AppShel
 
 
     //IMPORTANT function do not delete! (Can be a turning point)
-    //public static void main(String[] args) {
-        //System.out.println("This is running from SpringBoot application!");
-        //Run application with GUI in web browser
-        //SpringApplication.run(Application.class, args);
-
-    //}
-
+    /*
+    public static void main(String[] args) {
+        System.out.println("This is running from SpringBoot application!");
+        Run application with GUI in web browser
+        SpringApplication.run(Application.class, args);
+    }
+     */
 
 }
