@@ -2,7 +2,11 @@ package com.example.application.views.list.TerminalCode;
 
 import java.util.ArrayList;
 
+//Question block class for CLI mode, new class is required as the no mapping to UX component will be implemented
+
 public class QuestionBLockCLI {
+
+    //Question attributes
     private String questionType;
     private String answer;
     private String questionStatement;
@@ -15,6 +19,7 @@ public class QuestionBLockCLI {
         this.options = options;
     }
 
+    //Getters method
     public String getAnswer(){
         return answer;
     }

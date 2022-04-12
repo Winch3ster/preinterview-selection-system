@@ -4,7 +4,7 @@ package com.example.application.data.entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-
+//Contact class to store the candidate's information
 public class Contact {
 
     @NotEmpty
@@ -15,8 +15,22 @@ public class Contact {
     private String email = "";
 
     @NotEmpty
+    private int candidateScore =0;
+
+    @NotEmpty
     private boolean takenTest = true;
 
+    public Contact(String name, String email, int score){
+        this.candidateName = name;
+        this.email = email;
+        this.candidateScore = score;
+
+    }
+
+    //Getters and setters methods
+    public int getCandidateScore(){return candidateScore;}
+
+    public void setCandidateScore(int candidateScore) {this.candidateScore = candidateScore;}
 
     public String getCandidateName() {
         return candidateName;
@@ -34,12 +48,9 @@ public class Contact {
         this.email = email;
     }
 
-
     public boolean getTestStatus() {
         return takenTest;
     }
 
-    public void setTestStatus(boolean takenTest) {
-        this.takenTest = takenTest;
-    } //vaadin will automatically interpret this as the name for the column
+    public void setTestTaken(boolean takenTest) { this.takenTest = takenTest; }
 }

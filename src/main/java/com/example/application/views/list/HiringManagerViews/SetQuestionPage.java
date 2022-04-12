@@ -123,28 +123,6 @@ public class SetQuestionPage extends VerticalLayout {
         return saveQuestionButton;
     }
 
-    //Pack questions block into JSON format
-    private void packQuestions() {
-        //Hash map to store info into JSON
-        for(int z = 0; z < questionList.getComponentCount(); z++){
-            Component currentQuestionBlock = questionList.getComponentAt(z);
-            if (currentQuestionBlock instanceof QuestionBlock){
-
-                //Get question from question block
-                String questionText = ((QuestionBlock) currentQuestionBlock).getQuestionText();
-
-                //Get options from option block
-                ArrayList<String> questionOptions = ((QuestionBlock) currentQuestionBlock).getQuestionOptions();
-
-                //To be changed
-                String answer = ((QuestionBlock) currentQuestionBlock).getAnswer();
-                //
-                questionsAndAnswer.put(questionText, questionOptions); //Stores question and options into hashMap
-            }
-        }
-        System.out.println(questionsAndAnswer);
-    }
-
     private void packQuestionsJSON() {
 
         for(int z = 0; z < questionList.getComponentCount(); z++){

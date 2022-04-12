@@ -19,3 +19,7 @@ a[highlight] {
     border-style: none;
     overflow: hidden;
 }
+.dialog-header{
+    margin: 0;
+    background-color: rgba(17, 131, 202, 0);
+}

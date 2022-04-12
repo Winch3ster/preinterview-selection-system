@@ -3,7 +3,10 @@ package com.example.application.views.list.CandidateViews;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
+//Inherit attributes from the parent class (QuestionBlockCandidate)
 public class QuestionBlockCodeCandidate extends QuestionBlockCandidate{
+
+    //Instead of radio button, a text field will be instantiated to take the user input
     private TextField candidateAnswerSpace = new TextField();
 
     //Beginning of class constructor

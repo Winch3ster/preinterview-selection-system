@@ -1,9 +1,17 @@
 package com.example.application.views.list.CandidateViews;
 
+import com.example.application.data.Repository.ContactRepository;
+import com.example.application.data.entity.Contact;
+import com.example.application.views.list.HiringManagerViews.InterviewDatePage;
+import com.example.application.views.list.Home;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,49 +25,39 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 
 @PageTitle("Exam Page")
 @Route("examPage")
 public class ExamPage extends VerticalLayout {
 
+    //Candidates variable
     private int candidateScore;
-    private HorizontalLayout evaluateButtonLayout = new HorizontalLayout();
+    private String interviewDate;
+
+    //Getting the name and email from Home.class (From the login fields)
+    private String candidateName = Home.candidateName;
+    private String candidateEmail = Home.candidateEmail;
+
+    //GUI components
+    private VerticalLayout evaluateButtonLayout = new VerticalLayout();
     private JSONParser jsonParser = new JSONParser();
     private Button evaluateButton = new Button();
-
-    // <-- Test data -->
-    ArrayList<HashMap<String, ArrayList<String>>> questionAndAnswerToBeLoadedList = new ArrayList<>();
-
-    private HashMap<String, ArrayList<String>> questionAndAnswerToBeLoaded1 = new HashMap<>();
-    ArrayList<String> optionTest1 = new ArrayList<>();
-
-    private HashMap<String, ArrayList<String>> questionAndAnswerToBeLoaded2 = new HashMap<>();
-    ArrayList<String> optionTest2 = new ArrayList<>();
-    // <-- Test data -->
-
-
+    private Button dialogCloseButton = new Button();
+    private Dialog results = new Dialog();
     private VerticalLayout header = new VerticalLayout();
     private VerticalLayout mainContent = new VerticalLayout(); //Stores question blocks
+    private VerticalLayout dialogLayoutHeader = new VerticalLayout();
+
+    //Data from the ContactRepository class
+    ArrayList<Contact> contactExamPage = ContactRepository.contacts;
+
 
     public ExamPage(){
 
-        // <-- Test data -->
-        optionTest1.add("Legend");
-        optionTest1.add("Gay");
-        optionTest1.add("Jesus");
-        optionTest1.add("I miss him");
-        questionAndAnswerToBeLoaded1.put("What do you think of papa Franku?" , optionTest1);
-
-        optionTest2.add("True");
-        optionTest2.add("False");
-        questionAndAnswerToBeLoaded1.put("You are gay." , optionTest2);
-
-        questionAndAnswerToBeLoadedList.add(questionAndAnswerToBeLoaded1);
-        questionAndAnswerToBeLoadedList.add(questionAndAnswerToBeLoaded2);
-        // <-- Test data end-->
+        dialogLayoutHeader.addClassName("dialog-header");
         //Read JSON file
         try (FileReader reader = new FileReader("QuestionListJSON.json"))
         {
@@ -67,7 +65,6 @@ public class ExamPage extends VerticalLayout {
             Object obj = jsonParser.parse(reader);
 
             JSONArray questionList = (JSONArray) obj;
-            System.out.println(questionList);
 
             //instantiate question block according to JSON object
             questionList.forEach( question -> parseQuestionObject( (JSONObject) question ) );
@@ -78,8 +75,6 @@ public class ExamPage extends VerticalLayout {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        // <-- GUI for exam page starts here -->
         //Configuring web page
         addClassName("exam-page");
         setSizeFull();
@@ -87,18 +82,7 @@ public class ExamPage extends VerticalLayout {
         configureEvaluateButtonLayout();
         configureEvaluateButton();
         //Things to add in the page
-        add( header, mainContent, evaluateButton);
-
-        // <-- GUI for exam page ends here -->
-
-
-        // <-- Command Line Interface code starts here -->
-
-
-        // <-- Command Line Interface code ends here -->
-
-
-
+        add( header, mainContent, evaluateButtonLayout);
 
     } //end of constructor
 
@@ -112,10 +96,46 @@ public class ExamPage extends VerticalLayout {
         evaluateButton.setText("Evaluate");
         evaluateButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         evaluateButton.addClickListener(event -> {
-            candidateScore =0;
-            checkAnswers();
-            //To be changed
-            Notification.show("Your Score is " + candidateScore);
+            checkAnswers(); //Evaluate the answers
+
+            //Calculate the user score
+            double score = ((double) candidateScore/ (double) mainContent.getComponentCount()) * 100;
+
+            //Update the contact list in the ContactRepository class
+            contactExamPage.add(new Contact(candidateName, candidateEmail, (int) Math.round(score)));
+            ContactRepository.updateList(contactExamPage);
+
+
+            getInterviewDate();
+            configureDialogCloseButton();
+            VerticalLayout dialogLayoutContent = new VerticalLayout();
+
+            //If user scored above 60, output the interview date. Else, no
+            if (score >= 60){
+                dialogLayoutHeader.add(   new H2("Results"));
+                dialogLayoutContent.add(new H3("Congratulation, you have passed the exam with the score of: " + Math.round(score)),
+                                        new H3("The interview date will be on " + interviewDate),
+                                        new H3("Hope to see you soon!"));
+            } else {
+                dialogLayoutHeader.add(   new H2("Results"),
+                                    new H3("Thank you for taking the exam. Your score is: " + Math.round(score)),
+                                    new H3("Your application will be considered.")
+
+                );
+            }
+            results.add(dialogLayoutHeader, dialogLayoutContent, dialogCloseButton);
+            //Display the dialog in the web page
+            results.open();
+
+        });
+    }
+
+    private void configureDialogCloseButton() {
+        dialogCloseButton.setText("close");
+        dialogCloseButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        dialogCloseButton.addClickListener(clicked -> {
+            results.close();
+            UI.getCurrent().navigate("");
         });
     }
 
@@ -124,12 +144,9 @@ public class ExamPage extends VerticalLayout {
             Component currentCom = mainContent.getComponentAt(i);//get each object
             //Check if the object is an instance of QuestionBlocks class
             if(currentCom instanceof QuestionBlockCandidate){
-                String legitAnswer = ((QuestionBlockCandidate) currentCom).getAnswer();
-                String userAns = ((QuestionBlockCandidate) currentCom).getUserAnswer();
-                //System.out.println(legitAnswer);
-                //System.out.println(userAns);
-                if (userAns.equals(legitAnswer)){
-                    //System.out.println("this is running from check answer equality");
+                String givenAnswer = (((QuestionBlockCandidate) currentCom).getAnswer()).toLowerCase();
+                String userAns = (((QuestionBlockCandidate) currentCom).getUserAnswer()).toLowerCase();
+                if (userAns.contains(givenAnswer)){
                     candidateScore += 1; //increase candidateScore by 1 when candidate's answer match HM answer
                 }
             }
@@ -173,7 +190,26 @@ public class ExamPage extends VerticalLayout {
         }
     }
 
+    //Get interview date from interviewDate.json
+    private void getInterviewDate(){
+        try (FileReader reader = new FileReader("interviewDate.json"))
+        {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+            JSONObject interview = (JSONObject) obj;
+            JSONObject interviewDateObject = (JSONObject) interview.get("interviewDate");
 
+            //set the interview date variable (from this class) with the date from JSON file
+            interviewDate = (String) interviewDateObject.get("date");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

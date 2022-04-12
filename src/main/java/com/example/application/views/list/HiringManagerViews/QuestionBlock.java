@@ -22,10 +22,8 @@ import java.util.ArrayList;
 
 public class QuestionBlock extends VerticalLayout {
 
-
     @NotNull
     private String questionText;
-
     @NotNull
     private String answer;
 
@@ -33,7 +31,6 @@ public class QuestionBlock extends VerticalLayout {
     private String questionType;
     //Question types --> "Multiple Choice", "True False", "Code"
 
-    //Variable
     private boolean toBeRemoved;
 
 
@@ -65,9 +62,7 @@ public class QuestionBlock extends VerticalLayout {
         add(
 
                 generateQuestionBlock());
-
-
-    }
+    }//end of constructor
 
     private Component generateQuestionBlock() {
         //textField for Hiring Manager to inout the question statement
@@ -104,6 +99,8 @@ public class QuestionBlock extends VerticalLayout {
         optionDisplay.setItems("", "", "", "");
 
         if(questionTypes.equals("Multiple Choice")){
+
+            //Instantiate multiple choice question block
             RadioButtonGroup<String> options = new RadioButtonGroup<>();
 
             for (int i =0; i < 4; i++){
@@ -115,14 +112,14 @@ public class QuestionBlock extends VerticalLayout {
             choice1.setValueChangeMode(ValueChangeMode.EAGER);
             choice1.addValueChangeListener(userInput -> {
                 multipleChoiceOptions.set(0, choice1.getValue());
-                optionDisplay.setItems(multipleChoiceOptions);
+                optionDisplay.setItems(multipleChoiceOptions); //Display the option to the radio button
             });
 
             TextField choice2 = new TextField();
             choice2.setValueChangeMode(ValueChangeMode.EAGER);
             choice2.addValueChangeListener(userInput ->{
                         multipleChoiceOptions.set( 1, choice2.getValue());
-                        optionDisplay.setItems(multipleChoiceOptions);
+                        optionDisplay.setItems(multipleChoiceOptions); //Display the option to the radio button
                     }
             );
 
@@ -130,16 +127,15 @@ public class QuestionBlock extends VerticalLayout {
             choice3.setValueChangeMode(ValueChangeMode.EAGER);
             choice3.addValueChangeListener(userInput -> {
                 multipleChoiceOptions.set(2, choice3.getValue());
-                optionDisplay.setItems(multipleChoiceOptions);
+                optionDisplay.setItems(multipleChoiceOptions); //Display the option to the radio button
             });
 
             TextField choice4 = new TextField();
             choice4.setValueChangeMode(ValueChangeMode.EAGER);
             choice4.addValueChangeListener(userInput -> {
                 multipleChoiceOptions.set(3,choice4.getValue());
-                optionDisplay.setItems(multipleChoiceOptions);
+                optionDisplay.setItems(multipleChoiceOptions); //Display the option to the radio button
             });
-
 
             optionUserKeyIn.add(choice1,  choice2, choice3, choice4);
             optionBlock.add(optionUserKeyIn, optionDisplay);
@@ -147,17 +143,20 @@ public class QuestionBlock extends VerticalLayout {
 
 
         } else if(questionTypes.equals("True False")){
+
+            //Instantiate a true false question block
             RadioButtonGroup<String> true_falseChoice = new RadioButtonGroup<>();
             true_falseChoice.setLabel("Select the answer here");
             true_falseChoice.setItems("True", "False");
             true_falseChoice.addValueChangeListener(event -> this.answer = true_falseChoice.getValue());
-            //optionUserKeyIn.add(true_falseChoice);
             optionBlock.add(true_falseChoice);
 
         } else {
+
+            //Instantiate a coding question block
             TextField codingSectionAnswerField = new TextField();
-            codingSectionAnswerField.setLabel("Expected output from user's code: ");
-            codingSectionAnswerField.setPlaceholder("Expected one output only.");
+            codingSectionAnswerField.setLabel("Answer: ");
+            codingSectionAnswerField.setPlaceholder("One answer only.");
             codingSectionAnswerField.setValueChangeMode(ValueChangeMode.LAZY);
             codingSectionAnswerField.addValueChangeListener(valueChanged -> this.answer = codingSectionAnswerField.getValue());
             optionBlock.add(codingSectionAnswerField);

@@ -20,8 +20,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("This is from the main class!");
-        //Run application with GUI in web browser
         // <-- Command Line Interface code starts here -->
         Scanner userInput = new Scanner(System.in);
         boolean validInput = false;
@@ -29,9 +27,11 @@ public class Main {
         while(validInput == false){
 
             System.out.println("\nWelcome to Pre-Interview Selection System." +
-                    "\nTo run in terminal mode, enter 1. Else, enter 2 to enable GUI features (from main class)");
+                    "\nTo run in console mode, enter 1. Else, enter 2 to enable GUI features (from main class)");
             String userOption = userInput.nextLine(); //reads user input
 
+
+            //Check if user wants to run it in CLI mode or GUI mode
             if(userOption.equals("1")){
                 //Instantiate Home class (candidate sign in page). Candidate sign in code is in the class constructor
                 HomeCLI candidateSignIn = new HomeCLI();

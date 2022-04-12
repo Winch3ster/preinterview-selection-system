@@ -34,15 +34,22 @@ public class MainApplicationLayout extends AppLayout {
 
     private void createDrawer() {
         //RouterLink("Name to display", className)
-        RouterLink listView = new RouterLink("List", ManagerDashboard.class); //link to other page/view
+        //Link to list view
+        RouterLink listView = new RouterLink("List", ListView.class); //link to other page/view
         listView.setHighlightCondition(HighlightConditions.sameLocation());
 
+        //Link to set question view
         RouterLink setQuestion = new RouterLink("Set Questions", SetQuestionPage.class);
+        setQuestion.setHighlightCondition(HighlightConditions.sameLocation());
+
+        //Link to Interview date view
+        RouterLink updateInterviewDate = new RouterLink("Interview Date", InterviewDatePage.class);
         setQuestion.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(
                 listView,
-                setQuestion
+                setQuestion,
+                updateInterviewDate
         ));
     }
 }
